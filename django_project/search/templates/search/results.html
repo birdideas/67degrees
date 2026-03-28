@@ -45,6 +45,15 @@
   border-radius: 5px;
   font-weight: 600;
 }
+footer {
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p { font-size: 0.78rem; color: var(--ink-3); }
+    footer strong { color: var(--ink-2); font-weight: 600; }
   </style>
 </head>
 <body>
@@ -72,7 +81,10 @@
     <!-- JS will populate -->
   </div>
 </main>
-
+<footer>
+  <p>© 2026 <strong>67degrees</strong></p>
+  <p>I am you and what I see is me</p>
+</footer>
 
 <script>
 async function loadConnections() {
