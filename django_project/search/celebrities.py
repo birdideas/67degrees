@@ -72,22 +72,25 @@ CELEBRITIES = [
     {"name": "Kendall Jenner", "category": "Fashion", "emoji": "👗"},
 ]
 
-
 def search_celebrities(query, limit=8):
     if not query or len(query) < 1:
         return []
     query_lower = query.lower()
     results = []
+
     # Prioritize names starting with query
     for celeb in CELEBRITIES:
         name_lower = celeb["name"].lower()
         if name_lower.startswith(query_lower):
             results.append({**celeb, "score": 2})
+
     # Then names containing query
     for celeb in CELEBRITIES:
         name_lower = celeb["name"].lower()
         if not name_lower.startswith(query_lower) and query_lower in name_lower:
             results.append({**celeb, "score": 1})
+
     # Sort by score then alpha
     results.sort(key=lambda x: (-x["score"], x["name"]))
     return results[:limit]
+

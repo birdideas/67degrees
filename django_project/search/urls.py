@@ -6,3 +6,4 @@ urlpatterns = [
     path("results/", views.results, name="results"),
     path("api/suggestions/", views.suggestions, name="suggestions"),
 ]
+

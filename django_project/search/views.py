@@ -3,17 +3,14 @@ from django.http import JsonResponse
 from .celebrities import search_celebrities, CELEBRITIES
 import random
 
-
 def index(request):
     featured = random.sample(CELEBRITIES, min(6, len(CELEBRITIES)))
     return render(request, "search/index.html", {"featured": featured})
-
 
 def suggestions(request):
     query = request.GET.get("q", "").strip()
     results = search_celebrities(query)
     return JsonResponse({"results": results})
-
 
 def results(request):
     query = request.GET.get("q", "").strip()
@@ -23,3 +20,4 @@ def results(request):
         "celebrities": celebrities,
         "count": len(celebrities),
     })
+
