@@ -5,7 +5,7 @@ from google.genai import types
 from django.conf import settings
 
 prompt = """
-Find the degrees of separation between LeBron and {0}. Use famous people they may have known. Make sure to collapse long lines of succession such as US presidents, Popes of the Church, and children and parents. Try to keep it under six or seven degrees of separation if possible, but prioritize providing accurate information.
+Find the degrees of separation between {0} and {1}. Use famous people they may have met personally. Make sure to collapse long lines of succession such as US presidents, Popes of the Church, and children and parents. Try to keep it under six or seven degrees of separation if possible, but prioritize providing accurate information.
 Output in the following JSON format:
 [
 {{
@@ -17,7 +17,7 @@ Output in the following JSON format:
 ]
 """
 
-def send_prompt(person_a : str):
+def send_prompt(person_a : str, person_b : str):
     client = genai.Client(api_key=settings.GOOGLE_API_KEY)
 
     config = types.GenerateContentConfig(
@@ -26,7 +26,7 @@ def send_prompt(person_a : str):
 
     response = client.models.generate_content(
         model="gemini-2.5-flash",
-        contents=prompt.format(person_a),
+        contents=prompt.format(person_a, person_b),
         config=config
     )
 

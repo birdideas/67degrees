@@ -15,8 +15,9 @@ def suggestions(request):
     return JsonResponse({"results": results})
 
 def results(request):
-    celebrity_name = request.GET.get("q", "").strip()
-    gemini.send_prompt(celebrity_name)
+    person_a = request.GET.get("person_a")
+    person_b = request.GET.get("person_b")
+    gemini.send_prompt(person_a, person_b)
 
     query = request.GET.get("q", "").strip()
     celebrities = search_celebrities(query, limit=20) if query else []
