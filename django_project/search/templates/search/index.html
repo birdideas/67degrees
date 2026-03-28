@@ -233,6 +233,8 @@
 
     /* Ticker */
     .ticker-wrap {
+      position: inherit;
+      z-index: auto;
       width: 100%;
       overflow: hidden;
       padding: 0.9rem 0;
@@ -258,12 +260,6 @@
     }
     .ticker-sep { color: var(--accent); margin-left: 1.5rem; }
 
-    /* Featured */
-    .featured-section {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 3rem 6rem;
-    }
     .section-header {
       display: flex;
       align-items: center;
@@ -361,7 +357,6 @@
       header { padding: 1.25rem 1.5rem; }
       nav { display: none; }
       .hero { padding: 4rem 1.5rem 3rem; }
-      .featured-section { padding: 0 1.25rem 4rem; }
       .cards-grid { grid-template-columns: 1fr 1fr; }
       footer { flex-direction: column; gap: 0.4rem; text-align: center; }
     }
@@ -430,24 +425,6 @@
     </div>
   </div>
 
-  <section class="featured-section">
-    <div class="section-header">
-      <p class="section-label">Featured</p>
-      <p class="section-hint">Tap to explore</p>
-    </div>
-    <div class="cards-grid">
-      {% for celeb in featured %}
-      <a class="celeb-card" href="/results/?q={{ celeb.name|urlencode }}">
-        <span class="card-icon">{{ celeb.emoji }}</span>
-        <div class="card-info">
-          <div class="card-name">{{ celeb.name }}</div>
-          <div class="card-cat">{{ celeb.category }}</div>
-        </div>
-        <span class="card-arrow">→</span>
-      </a>
-      {% endfor %}
-    </div>
-  </section>
 </main>
 
 <footer>
