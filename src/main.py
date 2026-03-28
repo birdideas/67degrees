@@ -3,7 +3,7 @@ from google import genai
 from google.genai import types
 
 prompt = """
-Find the degrees of separation between LeBron and Jesus Christ. Use famous people they may have known. Make sure to collapse long lines of succession such as US presidents, Popes of the Church, and children and parents.
+Find the degrees of separation between LeBron and Jesus Christ. Use famous people they may have known. Make sure to collapse long lines of succession such as US presidents, Popes of the Church, and children and parents. Make sure to use 20 degrees at the most.
 Output in the following JSON format:
 [
 {
