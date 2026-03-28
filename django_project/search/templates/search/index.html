@@ -482,7 +482,7 @@
       .then(data => { if (currentQuery === query) renderSuggestions(data.results, query); });
   }
 
-  input_a.addEventListener('input_a', () => { clearTimeout(debounceTimer); debounceTimer = setTimeout(() => fetchSuggestions(input_a.value.trim()), 120); });
+  input_a.addEventListener('input', () => { clearTimeout(debounceTimer); debounceTimer = setTimeout(() => fetchSuggestions(input_a.value.trim()), 120); });
 
   input_a.addEventListener('keydown', e => {
     const items = box.querySelectorAll('.suggestion-item');
