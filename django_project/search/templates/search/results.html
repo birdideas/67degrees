@@ -10,13 +10,13 @@
     /* Your CSS from before; keep as-is */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #f7f5f2; --surface: #ffffff; --ink: #1a1917; --ink-2: #6b6760; --ink-3: #b0ada8;
-      --accent: #e05c3a; --accent2: #f2795c; --border: #e8e5e0; --hover: #f0ede8; --r: 12px;
+      --bg: black; --surface: #ffffff; --ink: white; --ink-2: #6b6760; --ink-3: #b0ada8;
+      --accent: rgb(27, 27, 200); --accent2: #f2795c; --border: #e8e5e0; --hover: #f0ede8; --r: 12px;
     }
-    body { background: var(--bg); color: var(--ink); font-family: 'Epilogue', sans-serif; min-height: 100vh; }
+    body { background: black; color: var(--ink); font-family: 'Epilogue', sans-serif; min-height: 100vh; }
     body::after { content: ''; position: fixed; inset: 0; background-image: radial-gradient(circle, #c8c4be 1px, transparent 1px); background-size: 28px 28px; opacity: 0.3; pointer-events: none; z-index: 0; }
     * { position: relative; z-index: 1; }
-    header { display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem 3rem; border-bottom: 1px solid var(--border); background: rgba(247,245,242,0.85); backdrop-filter: blur(12px); }
+    header { display: flex; align-items: center; gap: 1.5rem; padding: 1.5rem 3rem; border-bottom: 1px solid var(--border); background: black; backdrop-filter: blur(12px); }
     .logo { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--ink); text-decoration: none; flex-shrink: 0; }
     .logo-accent { color: var(--accent); }
     .divider { width: 1px; height: 1.25rem; background: var(--border); }
@@ -24,15 +24,15 @@
     .header-search:focus-within { border-color: var(--accent); }
     .header-search input { flex: 1; background: none; border: none; outline: none; font-family: 'Epilogue', sans-serif; font-size: 0.92rem; color: var(--ink); padding: 0.6rem 0; caret-color: var(--accent); }
     .header-search input::placeholder { color: var(--ink-3); }
-    .header-search button { background: none; border: none; cursor: pointer; color: var(--ink-3); padding: 0.4rem 0.65rem; border-radius: 99px; transition: color 0.18s, background 0.18s; }
+    .header-search button { background: rgb(27, 27, 200); border: none; cursor: pointer; color: var(--ink-3); padding: 0.4rem 0.65rem; border-radius: 99px; transition: color 0.18s, background 0.18s; }
     .header-search button:hover { color: var(--accent); background: var(--hover); }
-    main { max-width: 860px; margin: 0 auto; padding: 3rem 2rem 5rem; }
-    .results-meta { display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 2rem; }
+    main { max-width: 860px; margin: 0 auto; padding: 3rem 2rem 5rem; text-align: center;}
+    .results-meta { display: flex; align-items: baseline; gap: 0.75rem; margin-bottom: 2rem; justify-content: center;}
     .results-count { font-family: 'Syne', sans-serif; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); }
     .results-title { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; }
     .results-title .q { color: var(--accent); font-family: 'Epilogue', sans-serif; font-style: italic; font-weight: 300; }
     .results-list { display: flex; flex-direction: column; gap: 0.5rem; }
-    .result-row { display: flex; align-items: center; gap: 1rem; background: var(--surface); border: 1.5px solid var(--border); border-radius: var(--r); padding: 1rem 1.25rem; text-decoration: none; color: var(--ink); transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s; opacity: 0; animation: fadeUp 0.35s ease both; }
+    .result-row { display: flex; align-items: center; gap: 1rem; background: black; border: 1.5px solid var(--border); border-radius: var(--r); padding: 1rem 1.25rem; text-decoration: none; color: white; transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s; opacity: 0; animation: fadeUp 0.35s ease both; text-align: left;}
     .row-num { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; color: var(--ink-3); width: 1.5rem; text-align: right; flex-shrink: 0; }
     .row-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; flex: 1; }
     .row-cat { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); background: var(--hover); padding: 0.2rem 0.6rem; border-radius: 99px; }
@@ -40,7 +40,7 @@
     @media (max-width: 600px) { header { padding: 1rem 1.25rem; } main { padding: 2rem 1.25rem; } .row-num { display: none; } 
   }
     .person-name {
-  background: #e0e0e0; /* light gray */
+  background: rgb(27, 27, 200);
   padding: 0.15rem 0.5rem;
   border-radius: 5px;
   font-weight: 600;
@@ -62,16 +62,19 @@ footer {
   <a class="logo" href="/">67<span class="logo-accent">°</span></a>
   <span class="divider"></span>
   <form class="header-search" method="GET" action="/results/">
-    <input type="text" name="person_a" placeholder="Enter person A" id="person-a" />
-    <input type="text" name="person_b" placeholder="Enter person B" id="person-b" />
+    <input type="text" name="person_a" placeholder="Enter person A" id="person-a" autocomplete="off"/>
+    <input type="text" name="person_b" placeholder="Enter person B" id="person-b" autocomplete="off"/>
     <button type="submit">Search</button>
   </form>
 </header>
 
 <main>
-  <div class="results-meta">
-    <span class="results-count" id="results-count"></span>
-    <h2 class="results-title">Degrees of separation for <span class="q" id="query-name">...</span></h2>
+  <div class="results-meta" style="text-align: center;">
+    <h2 class="results-title">Degrees of separation for <br><span class="q" id="query-name">...</span>
+      <br>
+    <span class="results-count" id="results-count">Counting Results...</span>
+    </h2>
+    <br>
   </div>
 
   <div class="results-list" id="results-list">
