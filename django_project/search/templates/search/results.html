@@ -32,7 +32,7 @@
     .results-title { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800; letter-spacing: -0.02em; }
     .results-title .q { color: var(--accent); font-family: 'Epilogue', sans-serif; font-style: italic; font-weight: 300; }
     .results-list { display: flex; flex-direction: column; gap: 0.5rem; }
-    .result-row { display: flex; align-items: center; gap: 1rem; background: black; border: 1.5px solid var(--border); border-radius: var(--r); padding: 1rem 1.25rem; text-decoration: none; color: white; transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s; opacity: 0; animation: fadeUp 0.35s ease both; text-align: left;}
+    .result-row { display: flex; align-items: center; justify-content: center; gap: 1rem; background: black; padding: 1rem 1.25rem; text-decoration: none; color: white; transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s; opacity: 0; animation: fadeUp 0.35s ease both; text-align: left;}
     .row-num { font-family: 'Syne', sans-serif; font-size: 0.7rem; font-weight: 700; color: var(--ink-3); width: 1.5rem; text-align: right; flex-shrink: 0; }
     .row-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; flex: 1; }
     .row-cat { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); background: var(--hover); padding: 0.2rem 0.6rem; border-radius: 99px; }
@@ -44,6 +44,7 @@
   padding: 0.15rem 0.5rem;
   border-radius: 5px;
   font-weight: 600;
+  color: white;
 }
 footer {
       border-top: 1px solid var(--border);
@@ -54,6 +55,60 @@ footer {
     }
     footer p { font-size: 0.78rem; color: var(--ink-3); }
     footer strong { color: var(--ink-2); font-weight: 600; }
+.connection-chain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 0;
+}
+
+.person-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.person-name {
+  font-weight: 600;
+  font-size: 1.2em;
+  color: white
+}
+
+.person-image {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+}
+
+.connection-line {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 12px;
+  margin: 8px 0;
+}
+
+.arrow-down {
+  font-size: 2em;
+  color: #666;
+}
+
+.connection-text {
+  padding: 6px 20px;
+  background: #f5f5f5;
+  border-radius: 20px;
+  font-size: 1em;
+  color: #555;
+}
+
+.result-row {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
   </style>
 </head>
 <body>
@@ -62,8 +117,8 @@ footer {
   <a class="logo" href="/">67<span class="logo-accent">°</span></a>
   <span class="divider"></span>
   <form class="header-search" method="GET" action="/results/">
-    <input type="text" name="person_a" placeholder="Enter person A" id="person-a" autocomplete="off"/>
-    <input type="text" name="person_b" placeholder="Enter person B" id="person-b" autocomplete="off"/>
+    <input type="text" name="person_a" placeholder="Enter person A" id="person-a" autocomplete="off" style="color: black;"/>
+    <input type="text" name="person_b" placeholder="Enter person B" id="person-b" autocomplete="off" style="color: black;"/>
     <button type="submit">Search</button>
   </form>
 </header>
@@ -90,6 +145,24 @@ footer {
 </footer>
 
 <script>
+async function getWikipediaImage(personName) {
+  const searchUrl = `https://en.wikipedia.org/w/api.php?action=query&titles=${encodeURIComponent(personName)}&prop=pageimages&format=json&pithumbsize=300&origin=*`;
+  
+  try {
+    const response = await fetch(searchUrl);
+    const data = await response.json();
+    const pages = data.query.pages;
+    const pageId = Object.keys(pages)[0];
+    
+    if (pages[pageId].thumbnail) {
+      return pages[pageId].thumbnail.source;
+    }
+  } catch (err) {
+    console.error('Error fetching image for', personName, err);
+  }
+  return 'https://e-quester.com/wp-content/uploads/2021/11/placeholder-image-person-jpg.jpg';
+}
+
 async function loadConnections() {
   const params = new URLSearchParams(window.location.search);
   const personA = params.get("person_a");
@@ -100,13 +173,13 @@ async function loadConnections() {
   document.getElementById("query-name").textContent = `${personA} → ${personB}`;
   const list = document.getElementById("results-list");
   const loadingText = document.getElementById("loading-text");
-  loadingText.style.display = "block"; // show loading
+  loadingText.style.display = "block";
 
   try {
     const res = await fetch(`/api/connections/?a=${encodeURIComponent(personA)}&b=${encodeURIComponent(personB)}`);
     const data = await res.json();
 
-    list.innerHTML = ""; // clear loading
+    list.innerHTML = "";
 
     if (data.error) {
       list.innerHTML = `<div class="empty">
@@ -129,19 +202,73 @@ async function loadConnections() {
 
     document.getElementById("results-count").textContent = `${results.length} result${results.length > 1 ? "s" : ""}`;
 
-    results.forEach((item, i) => {
+    // Track people across ALL results to avoid duplicates
+    const globalSeenPeople = new Set();
+
+    // Build the connection chain for each result
+    for (let i = 0; i < results.length; i++) {
+      const item = results[i];
       const row = document.createElement("div");
       row.className = "result-row";
-      row.innerHTML = `
-        <span class="row-num">${i + 1}</span>
-        <span class="row-name">
-          <span class="person-name">${item.person_a}</span> 
-          ${item.connection} 
-          <span class="person-name">${item.person_b}</span>
-        </span>
+      
+      const chainContainer = document.createElement("div");
+      chainContainer.className = "connection-chain";
+      
+      // Collect unique people from this connection
+      const people = [item.person_a, item.person_b];
+      const uniquePeople = [];
+      const seenInThisChain = new Set();
+      
+      people.forEach(person => {
+        if (!seenInThisChain.has(person)) {
+          seenInThisChain.add(person);
+          uniquePeople.push(person);
+        }
+      });
+      
+      // Fetch images for unique people
+      const images = {};
+      for (const person of uniquePeople) {
+        images[person] = await getWikipediaImage(person);
+      }
+      
+      // Build the visual chain
+      let chainHTML = ``;
+      
+      // Person A - only show if not seen globally
+      if (!globalSeenPeople.has(item.person_a)) {
+        chainHTML += `
+          <div class="person-item">
+            <div class="person-name">${item.person_a}</div>
+            <img src="${images[item.person_a]}" alt="${item.person_a}" class="person-image">
+          </div>
+        `;
+        globalSeenPeople.add(item.person_a);
+      }
+      
+      // Arrow and connection
+      chainHTML += `
+        <div class="connection-line">
+          <span class="connection-text">${item.connection}</span>
+          <span class="arrow-down">↓</span>
+        </div>
       `;
+      
+      // Person B - only show if not seen globally
+      if (!globalSeenPeople.has(item.person_b)) {
+        chainHTML += `
+          <div class="person-item">
+            <div class="person-name">${item.person_b}</div>
+            <img src="${images[item.person_b]}" alt="${item.person_b}" class="person-image">
+          </div>
+        `;
+        globalSeenPeople.add(item.person_b);
+      }
+      
+      chainContainer.innerHTML = chainHTML;
+      row.appendChild(chainContainer);
       list.appendChild(row);
-    });
+    }
   } catch (err) {
     console.error(err);
     list.innerHTML = `<div class="empty">
@@ -149,9 +276,10 @@ async function loadConnections() {
         <h2>Error loading connections</h2>
       </div>`;
   } finally {
-    loadingText.style.display = "none"; // hide loading
+    loadingText.style.display = "none";
   }
 }
+
 window.addEventListener("DOMContentLoaded", loadConnections);
 </script>
 
