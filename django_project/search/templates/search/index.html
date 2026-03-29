@@ -365,17 +365,27 @@
     @media (max-width: 480px) {
       .cards-grid { grid-template-columns: 1fr; }
     }
+  .search-btn {
+  position: absolute;
+  top: -40px;
+  left: 420px;
+}
+
+/* Only applies on mobile screens */
+@media (max-width: 600px) {
+  .search-btn {
+    top: auto;
+    bottom: -66px;
+    left: 57px;
+  }
+}
   </style>
 </head>
 <body>
 
 <header>
   <a class="logo" href="/">67<span class="logo-accent">°</span></a>
-  <!--<nav>
-    <a href="#">Trending</a>
-    <a href="#">Categories</a>
-    <a href="#" class="nav-pill">Sign in</a>
-  </nav>-->
+  
 </header>
 
 <main>
@@ -391,7 +401,8 @@
           <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
         </svg>
       <form class="search-form" method="GET" action="/results/" id="search-form">
-
+   
+   <div>
   <!-- Person A -->
   <input
     type="text"
@@ -412,8 +423,8 @@
     required
     style="flex:1; border:none; outline:none; padding:0.75rem;"
     autocomplete="off"
-  />
-
+    />
+  <div>
   <button type="submit" class="search-btn">Connect</button>
 </form>
       <div id="suggestions-box" role="listbox"></div>
