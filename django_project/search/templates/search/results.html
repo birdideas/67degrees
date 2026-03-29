@@ -98,7 +98,6 @@ async function loadConnections() {
   if (!personA || !personB) return;
 
   document.getElementById("query-name").textContent = `${personA} → ${personB}`;
-
   const list = document.getElementById("results-list");
   const loadingText = document.getElementById("loading-text");
   loadingText.style.display = "block"; // show loading
@@ -106,10 +105,19 @@ async function loadConnections() {
   try {
     const res = await fetch(`/api/connections/?a=${encodeURIComponent(personA)}&b=${encodeURIComponent(personB)}`);
     const data = await res.json();
+
+    list.innerHTML = ""; // clear loading
+
+    if (data.error) {
+      list.innerHTML = `<div class="empty">
+        <span class="empty-icon">○</span>
+        <h2>${data.error}</h2>
+      </div>`;
+      document.getElementById("results-count").textContent = "0 results";
+      return;
+    }
+
     const results = data.results;
-
-    list.innerHTML = ""; // clear previous/loading text
-
     if (!results || results.length === 0) {
       list.innerHTML = `<div class="empty">
         <span class="empty-icon">○</span>
@@ -140,6 +148,8 @@ async function loadConnections() {
         <span class="empty-icon">○</span>
         <h2>Error loading connections</h2>
       </div>`;
+  } finally {
+    loadingText.style.display = "none"; // hide loading
   }
 }
 window.addEventListener("DOMContentLoaded", loadConnections);
