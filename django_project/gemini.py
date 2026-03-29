@@ -34,7 +34,6 @@ def send_prompt(person_a: str, person_b: str):
 
     text = response.text.strip()
 
-    # 🔥 Handle cases where Gemini wraps JSON in ```json blocks
     if text.startswith("```"):
         text = text.split("```")[1]
         text = text.replace("json", "").strip()
